@@ -1,0 +1,348 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Task API
+  description: |
+    This is the OpenAPI v3 specification for a Task List Microservice.
+    Data is being saved on MongoDB.
+servers:
+  - url: https://{domain}:{port}/api/{version}
+    variables:
+      domain:
+        default: localhost
+        description: Hostname
+      port:
+        default: '8080'
+        description: Port
+      version:
+        default: v1
+        enum:
+          - v1
+paths:
+  /tasks/:
+    get:
+      description: 'Fetches a list of tasks which can be queried based on the filters given below'
+      operationId: getTasksWithFilter
+      parameters:
+        - name: name
+          in: query
+          description: 'The name of the Task item'
+          schema:
+            type: string
+            nullable: true
+          examples:
+            fetchGrocery:
+              value: 'Fetch Grocery'
+              summary: 'Fetch Grocery'
+            pickUpDad:
+              value: 'Pick up Dad'
+              summary: 'Pick up Dad'
+
+        - name: desc
+          in: query
+          description: 'The description of the Task item'
+          schema:
+            type: string
+            nullable: true
+          examples:
+            fetchGrocery:
+              value: 'Go and fetch grocery from Spencers'
+              summary: 'Go and fetch grocery from Spencers'
+            pickUpDad:
+              value: 'Pick up Dad from Airport'
+              summary: 'Pick up Dad from Airport'
+        - name: priority
+          in: query
+          description: 'The priority of the Task item'
+          schema:
+            $ref: '#/components/schemas/Priority'
+        - name: completed
+          in: query
+          description: 'The completed status of the Task item'
+          schema:
+            type: boolean
+            nullable: true
+          examples:
+            completed:
+              value: true
+              summary: 'Completed'
+            incomplete:
+              value: false
+              summary: 'Incomplete'
+        - name: completionDate
+          in: query
+          description: 'The completion date of the Task item'
+          schema:
+            type: string
+            nullable: true
+            format: date-time
+        - name: dueDate
+          in: query
+          description: 'The due date of the Task item'
+          schema:
+            type: string
+            nullable: true
+            format: date-time
+      responses:
+        '200':
+          description: A Json array of TODOs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /task/{taskId}:
+    get:
+      description: 'Fetches a single Task based on a given Task ID'
+      operationId: getTaskById
+      parameters:
+        - name: taskId
+          in: path
+          description: 'ID of the Task List to be fetched'
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: 'Fetched Task Item'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /task/:
+    post:
+      description: 'creates a new task item'
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '200':
+          description: 'Created Task Item'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /task/{taskIdToUpdate}:
+    patch:
+      description: 'updates an existing task item'
+      operationId: updateTask
+      parameters:
+        - name: taskIdToUpdate
+          in: path
+          description: 'ID of the task item'
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '200':
+          description: 'Created Task Item'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /task/{taskIdToDelete}:
+    delete:
+      description: 'delete an existing task item'
+      operationId: deleteTask
+      parameters:
+        - name: taskIdToDelete
+          in: path
+          description: 'ID of the Task item'
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: 'Created Task Item'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Name of the task item'
+          example: 'Task Item 1'
+        description:
+          type: string
+          description: 'Description of the task or task item'
+          example: 'Description for Task Item 1'
+        priority:
+          $ref: '#/components/schemas/Priority'
+        dueDate:
+          type: string
+          format: date-time
+          description: 'The date on which the task is due'
+          example: '2021-01-30T08:30:00Z'
+        completed:
+          type: boolean
+          description: 'To mark if the task is completed or not'
+          example: false
+        completionDate:
+          type: string
+          format: date-time
+          description: 'The date and time when the task was completed'
+          example: '2021-01-30T08:30:00Z'
+    TaskResponse:
+      type: object
+      properties:
+        taskId:
+          type: string
+          description: 'ID of the TODO Item'
+          example: '0001'
+        task:
+          $ref: '#/components/schemas/Task'
+    Error:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: 'Denotes the error code'
+          example: 'ERR-01'
+        errorMessage:
+          type: string
+          description: 'The complete error message'
+          example: 'This is an error message and description'
+    Priority:
+      type: string
+      enum:
+        - NORMAL
+        - INTERMEDIATE
+        - URGENT
+      example: 'NORMAL'
+
+  responses:
+    NotFound:
+      description: 'Returned when the page is not found'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Returned when the user is not authorized to access the endpoint'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'Returned when the user is forbidden to access the endpoint'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotAllowed:
+      description: 'Returned when the user uses an incorrect method to access the endpoint'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: 'Returned when the an internal server error occurs'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotImplemented:
+      description: 'Returned when a functionality is not implemented'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServiceUnavailable:
+      description: 'Returned when the service is unavailable'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security:
+  - {}
+
+
