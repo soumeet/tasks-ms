@@ -34,10 +34,6 @@ paths:
             fetchGrocery:
               value: 'Fetch Grocery'
               summary: 'Fetch Grocery'
-            pickUpDad:
-              value: 'Pick up Dad'
-              summary: 'Pick up Dad'
-
         - name: desc
           in: query
           description: 'The description of the Task item'
@@ -51,24 +47,16 @@ paths:
             pickUpDad:
               value: 'Pick up Dad from Airport'
               summary: 'Pick up Dad from Airport'
+        - name: status
+          in: query
+          description: 'The status of the Task item'
+          schema:
+            $ref: '#/components/schemas/Status'
         - name: priority
           in: query
           description: 'The priority of the Task item'
           schema:
             $ref: '#/components/schemas/Priority'
-        - name: completed
-          in: query
-          description: 'The completed status of the Task item'
-          schema:
-            type: boolean
-            nullable: true
-          examples:
-            completed:
-              value: true
-              summary: 'Completed'
-            incomplete:
-              value: false
-              summary: 'Incomplete'
         - name: completionDate
           in: query
           description: 'The completion date of the Task item'
@@ -187,7 +175,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: '#/components/schemas/TaskResponse'
       responses:
         '200':
           description: 'Created Task Item'
@@ -257,15 +245,13 @@ components:
           example: 'Description for Task Item 1'
         priority:
           $ref: '#/components/schemas/Priority'
+        status:
+          $ref: '#/components/schemas/Status'
         dueDate:
           type: string
           format: date-time
           description: 'The date on which the task is due'
           example: '2021-01-30T08:30:00Z'
-        completed:
-          type: boolean
-          description: 'To mark if the task is completed or not'
-          example: false
         completionDate:
           type: string
           format: date-time
@@ -295,9 +281,17 @@ components:
       type: string
       enum:
         - NORMAL
-        - INTERMEDIATE
+        - MINOR
         - URGENT
       example: 'NORMAL'
+    Status:
+      type: string
+      enum:
+        - NOT_STARTED
+        - IN_PROGRESS
+        - ON_HOLD
+        - CANCELLED
+        - COMPLETED
 
   responses:
     NotFound:
