@@ -14,8 +14,8 @@
 	<name>tasks-ms</name>
 	<description>Task Management Microservice</description>
 	<properties>
-		<java.version>11</java.version>
-		<package.path>com.todoapp.todo</package.path>
+		<java.version>1.8</java.version>
+		<package.path>io.todo.task</package.path>
 		<swagger.annotations.version>1.5.22</swagger.annotations.version>
 		<jackson.databind.nullable>0.2.1</jackson.databind.nullable>
 	</properties>

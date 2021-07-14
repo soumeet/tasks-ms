@@ -1,7 +1,7 @@
-package net.todo.tasksms.dao.model;
+package io.todo.tasksms.dao.model;
 
-import com.todoapp.todo.model.Priority;
-import com.todoapp.todo.model.Status;
+import io.todo.task.model.Priority;
+import io.todo.task.model.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +17,6 @@ import java.time.OffsetDateTime;
 @Builder
 @Document(collection = "tasks")
 public class Task {
-
     @Id
     private String id;
     private String name;

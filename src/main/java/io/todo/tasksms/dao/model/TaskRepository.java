@@ -1,4 +1,4 @@
-package net.todo.tasksms.dao.model;
+package io.todo.tasksms.dao.model;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
