@@ -2,3 +2,15 @@ spring:
   data:
     mongodb:
       uri: mongodb+srv://admin:root@todo-cluster-0.nscq6.mongodb.net/task?retryWrites=true&w=majority
+
+logging:
+  level:
+    io:
+      todo:
+        taskms: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

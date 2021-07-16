@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 @ToString
 @Builder
 @Document(collection = "tasks")
-public class Task {
+public class TaskEntity {
     @Id
     private String id;
     private String name;

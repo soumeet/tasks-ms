@@ -6,7 +6,7 @@ info:
     This is the OpenAPI v3 specification for a Task List Microservice.
     Data is being saved on MongoDB.
 servers:
-  - url: https://{domain}:{port}/api/{version}
+  - url: http://{domain}:{port}/api/{version}
     variables:
       domain:
         default: localhost
@@ -79,7 +79,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TaskResponse'
+                  $ref: '#/components/schemas/Task'
         '404':
           $ref: '#/components/responses/NotFound'
         '401':
@@ -104,15 +104,14 @@ paths:
           description: 'ID of the Task List to be fetched'
           required: true
           schema:
-            type: integer
-            format: int32
+            type: string
       responses:
         '200':
           description: 'Fetched Task Item'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskResponse'
+                $ref: '#/components/schemas/Task'
         '404':
           $ref: '#/components/responses/NotFound'
         '401':
@@ -143,7 +142,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskResponse'
+                $ref: '#/components/schemas/Task'
         '404':
           $ref: '#/components/responses/NotFound'
         '401':
@@ -168,14 +167,13 @@ paths:
           description: 'ID of the task item'
           required: true
           schema:
-            type: integer
-            format: int32
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskResponse'
+              $ref: '#/components/schemas/Task'
       responses:
         '200':
           description: 'Created Task Item'
@@ -207,8 +205,7 @@ paths:
           description: 'ID of the Task item'
           required: true
           schema:
-            type: integer
-            format: int32
+            type: string
       responses:
         '200':
           description: 'Created Task Item'
@@ -235,6 +232,10 @@ components:
     Task:
       type: object
       properties:
+        id:
+          type: string
+          description: 'The ID of the task'
+          example: '0001'
         name:
           type: string
           description: 'Name of the task item'
@@ -257,15 +258,6 @@ components:
           format: date-time
           description: 'The date and time when the task was completed'
           example: '2021-01-30T08:30:00Z'
-    TaskResponse:
-      type: object
-      properties:
-        taskId:
-          type: string
-          description: 'ID of the TODO Item'
-          example: '0001'
-        task:
-          $ref: '#/components/schemas/Task'
     Error:
       type: object
       properties:
@@ -338,5 +330,3 @@ components:
             $ref: '#/components/schemas/Error'
 security:
   - {}
-
-

@@ -2,8 +2,7 @@ package io.todo.tasksms.dao;
 
 import io.todo.task.model.Priority;
 import io.todo.task.model.Status;
-import io.todo.tasksms.dao.model.Task;
-import io.todo.tasksms.dao.model.TaskRepository;
+import io.todo.tasksms.dao.model.TaskEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +16,7 @@ class TaskRepositoryTests {
 
     @Test
     void testCreate() {
-        Task task = Task.builder()
+        TaskEntity taskEntity = TaskEntity.builder()
                 .name("task-name-" + new Random().nextLong())
                 .description("task-desc-" + new Random().nextLong())
                 .priority(Priority.MINOR)
@@ -26,6 +25,6 @@ class TaskRepositoryTests {
                 .dueDate(null)
                 .build();
 
-        taskRepository.insert(task);
+        taskRepository.insert(taskEntity);
     }
 }
