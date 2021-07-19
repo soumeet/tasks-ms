@@ -4,20 +4,16 @@ import io.todo.task.api.TaskApiDelegate;
 import io.todo.task.model.Task;
 import io.todo.tasksms.dao.TaskDAO;
 import io.todo.tasksms.exceptions.TaskNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-@RestController
+@RequiredArgsConstructor
+@Service
 public class TaskApiImpl implements TaskApiDelegate {
 
     private final TaskDAO taskDAO;
-
-    @Autowired
-    public TaskApiImpl(TaskDAO taskDAO) {
-        this.taskDAO = taskDAO;
-    }
 
     @Override
     public ResponseEntity<Task> createTask(Task task) {

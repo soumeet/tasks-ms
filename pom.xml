@@ -107,15 +107,8 @@
 							<generatorName>spring</generatorName>
 							<apiPackage>${package.path}.api</apiPackage>
 							<modelPackage>${package.path}.model</modelPackage>
-							<supportingFilesToGenerate>
-								ApiUtil.java
-							</supportingFilesToGenerate>
-							<configOptions>
-								<delegatePattern>true</delegatePattern>
-								<unhandledException>true</unhandledException>
-								<performBeanValidation>true</performBeanValidation>
-								<dateLibrary>java8</dateLibrary>
-							</configOptions>
+							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+							<configurationFile>${project.basedir}/openapi-generator-config.json</configurationFile>
 						</configuration>
 					</execution>
 				</executions>

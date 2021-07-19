@@ -1,0 +1,10 @@
+{
+  "delegatePattern": true,
+  "dateLibrary": "java8",
+  "unhandledException": true,
+  "performBeanValidation": true,
+  "enablePostProcessFile": true,
+  "serializationLibrary": "jackson",
+  "useBeanValidation": true,
+  "generateApiTests": true
+}
