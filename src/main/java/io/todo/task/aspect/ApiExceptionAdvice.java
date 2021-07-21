@@ -1,7 +1,7 @@
-package io.todo.tasksms.aspect;
+package io.todo.task.aspect;
 
 import io.todo.task.model.Error;
-import io.todo.tasksms.exceptions.TaskNotFoundException;
+import io.todo.task.exceptions.TaskNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

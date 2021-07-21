@@ -1,7 +1,7 @@
-package io.todo.tasksms.dao;
+package io.todo.task.dao;
 
 import io.todo.task.model.Task;
-import io.todo.tasksms.exceptions.TaskNotFoundException;
+import io.todo.task.exceptions.TaskNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

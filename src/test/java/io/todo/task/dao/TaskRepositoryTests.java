@@ -1,8 +1,8 @@
-package io.todo.tasksms.dao;
+package io.todo.task.dao;
 
 import io.todo.task.model.Priority;
 import io.todo.task.model.Status;
-import io.todo.tasksms.dao.model.TaskEntity;
+import io.todo.task.dao.model.TaskEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

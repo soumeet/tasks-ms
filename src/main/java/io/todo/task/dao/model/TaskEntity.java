@@ -1,4 +1,4 @@
-package io.todo.tasksms.dao.model;
+package io.todo.task.dao.model;
 
 import io.todo.task.model.Priority;
 import io.todo.task.model.Status;

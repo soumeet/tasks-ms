@@ -1,4 +1,4 @@
-package io.todo.tasksms.dao;
+package io.todo.task.dao;
 
 
 public class TaskDAOTests {
