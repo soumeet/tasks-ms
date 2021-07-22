@@ -16,21 +16,10 @@ import java.util.Map;
 
 @Log4j2
 @ComponentScan({"io.todo.task"})
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class TasksMsApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(TasksMsApplication.class, args);
-	}
-
-	@EventListener
-    public void handleContextRefresh(ContextRefreshedEvent event) {
-        ApplicationContext applicationContext = event.getApplicationContext();
-        RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext
-                .getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
-        Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping
-                .getHandlerMethods();
-        map.forEach((key, value) -> LOGGER.info("Mappings : {} {}", key, value));
+    public static void main(String[] args) {
+        SpringApplication.run(TasksMsApplication.class, args);
     }
 }
 
