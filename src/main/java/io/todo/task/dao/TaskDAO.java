@@ -3,11 +3,13 @@ package io.todo.task.dao;
 import io.todo.task.model.Task;
 import io.todo.task.exceptions.TaskNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
+import java.util.UUID;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class TaskDAO {
@@ -15,8 +17,7 @@ public class TaskDAO {
     private final List<Task> taskList;
 
     public Task createTask(Task task) {
-        Random random = new Random();
-        task.setId("T" + random.nextInt());
+        task.setId(UUID.randomUUID().toString());
         taskList.add(task);
         return task;
     }
@@ -37,17 +38,17 @@ public class TaskDAO {
     }
 
     public Task deleteTask(String taskId) throws TaskNotFoundException {
-        Task readTask = readTask(taskId);
+        var readTask = readTask(taskId);
         taskList.remove(readTask);
         return readTask;
     }
 
     private Task modifyTask(Task newTask, Task oldTask) {
         return oldTask.name(newTask.getName())
-                .description(oldTask.getDescription())
-                .priority(oldTask.getPriority())
-                .status(oldTask.getStatus())
-                .dueDate(oldTask.getDueDate())
-                .completionDate(oldTask.getCompletionDate());
+                .description(newTask.getDescription())
+                .priority(newTask.getPriority())
+                .status(newTask.getStatus())
+                .dueDate(newTask.getDueDate())
+                .completionDate(newTask.getCompletionDate());
     }
 }

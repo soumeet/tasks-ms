@@ -116,46 +116,46 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <configuration>
-                    <registry>registry.hub.docker.com/itachi0</registry>
-                    <dockerHost>http://127.0.0.1:2375</dockerHost>
-                    <verbose>true</verbose>
-                    <images>
-                        <image>
-                            <name>${project.groupId}.${project.artifactId}:${project.version}</name>
-                            <build>
-                                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
-                                <assembly>
-                                    <descriptorRef>artifact</descriptorRef>
-                                </assembly>
-                            </build>
-                        </image>
-                    </images>
-                    <authConfig>
-                        <username>itachi0</username>
-                        <password>zxcvbnM@0</password>
-                    </authConfig>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>docker-build</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>docker-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>io.fabric8</groupId>-->
+            <!--                <artifactId>docker-maven-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <registry>registry.hub.docker.com/itachi0</registry>-->
+            <!--                    <dockerHost>http://127.0.0.1:2375</dockerHost>-->
+            <!--                    <verbose>true</verbose>-->
+            <!--                    <images>-->
+            <!--                        <image>-->
+            <!--                            <name>${project.groupId}.${project.artifactId}:${project.version}</name>-->
+            <!--                            <build>-->
+            <!--                                <dockerFile>${project.basedir}/Dockerfile</dockerFile>-->
+            <!--                                <assembly>-->
+            <!--                                    <descriptorRef>artifact</descriptorRef>-->
+            <!--                                </assembly>-->
+            <!--                            </build>-->
+            <!--                        </image>-->
+            <!--                    </images>-->
+            <!--                    <authConfig>-->
+            <!--                        <username>itachi0</username>-->
+            <!--                        <password>zxcvbnM@0</password>-->
+            <!--                    </authConfig>-->
+            <!--                </configuration>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>docker-build</id>-->
+            <!--                        <phase>install</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>build</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                    <execution>-->
+            <!--                        <id>docker-deploy</id>-->
+            <!--                        <phase>deploy</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>push</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

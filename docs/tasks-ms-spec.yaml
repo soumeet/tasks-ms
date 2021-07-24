@@ -248,12 +248,12 @@ components:
           $ref: '#/components/schemas/Status'
         dueDate:
           type: string
-          format: date-time
+          format: yyyy-MM-dd'T'HH:mm:ssZ
           description: 'The date on which the task is due'
           example: '2021-01-30T08:30:00Z'
         completionDate:
           type: string
-          format: date-time
+          format: yyyy-MM-dd'T'HH:mm:ssZ
           description: 'The date and time when the task was completed'
           example: '2021-01-30T08:30:00Z'
     Error:
