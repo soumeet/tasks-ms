@@ -38,13 +38,13 @@ public class TaskDAO {
     }
 
     public Task deleteTask(String taskId) throws TaskNotFoundException {
-        var readTask = readTask(taskId);
+        Task readTask = readTask(taskId);
         taskList.remove(readTask);
         return readTask;
     }
 
-    private Task modifyTask(Task newTask, Task oldTask) {
-        return oldTask.name(newTask.getName())
+    private void modifyTask(Task newTask, Task oldTask) {
+        oldTask.name(newTask.getName())
                 .description(newTask.getDescription())
                 .priority(newTask.getPriority())
                 .status(newTask.getStatus())

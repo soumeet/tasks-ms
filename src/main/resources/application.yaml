@@ -6,8 +6,7 @@ spring:
 logging:
   level:
     io:
-      todo:
-        taskms: DEBUG
+      todo: TRACE
 
 management:
   endpoints:

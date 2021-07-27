@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Log4j2
 @ControllerAdvice
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-public class ApiExceptionAdvice {
+public class ApiExceptionAspect {
 
     @ExceptionHandler(TaskNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
