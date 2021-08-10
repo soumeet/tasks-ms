@@ -1,4 +1,4 @@
-package io.todo.tasksms.dao.model;
+package io.todo.task.dao.model;
 
 import io.todo.task.model.Priority;
 import io.todo.task.model.Status;
@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 @ToString
 @Builder
 @Document(collection = "tasks")
-public class Task {
+public class TaskEntity {
     @Id
     private String id;
     private String name;
