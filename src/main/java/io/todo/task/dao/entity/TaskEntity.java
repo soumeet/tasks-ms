@@ -1,19 +1,12 @@
-package io.todo.task.dao.model;
+package io.todo.task.dao.entity;
 
 import io.todo.task.model.Priority;
 import io.todo.task.model.Status;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.OffsetDateTime;
-
-@Getter
-@Setter
-@ToString
+@Data
 @Builder
 @Document(collection = "tasks")
 public class TaskEntity {
@@ -23,6 +16,6 @@ public class TaskEntity {
     private String description;
     private Priority priority;
     private Status status;
-    private OffsetDateTime dueDate;
-    private OffsetDateTime completionDate;
+    private String dueDate;
+    private String completionDate;
 }
