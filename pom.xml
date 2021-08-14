@@ -135,7 +135,7 @@
                         </image>
                     </images>
                 </configuration>
-                <executions>
+                <!--<executions>
                     <execution>
                         <id>docker-build</id>
                         <phase>install</phase>
@@ -150,7 +150,7 @@
                             <goal>push</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
