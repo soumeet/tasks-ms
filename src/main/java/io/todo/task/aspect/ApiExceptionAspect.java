@@ -1,5 +1,6 @@
 package io.todo.task.aspect;
 
+import io.todo.task.exceptions.TaskNotCreatedException;
 import io.todo.task.model.Error;
 import io.todo.task.exceptions.TaskNotFoundException;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +25,17 @@ public class ApiExceptionAspect {
         error.errorCode("TASK_NOT_FOUND").errorMessage("The provided Task ID is not found");
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(error);
+    }
+
+    @ExceptionHandler(TaskNotCreatedException.class)
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Error> handleTaskNotCreatedError() {
+        LOGGER.info("Entry into ApiExceptionAdvice#handleTaskNotCreatedError");
+        Error error = new Error();
+        error.errorCode("TASK_NOT_CREATED").errorMessage("The provided Task is not created");
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(error);
     }
 }
