@@ -1,0 +1,90 @@
+package io.todo.task.service;
+
+import io.todo.task.dao.TaskRepository;
+import io.todo.task.dao.entity.TaskEntity;
+import io.todo.task.exceptions.TaskNotFoundException;
+import io.todo.task.mapper.TaskEntityMapper;
+import io.todo.task.mapper.TaskEntityTaskMapper;
+import io.todo.task.model.Task;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.time.OffsetDateTime;
+import java.util.Optional;
+import java.util.UUID;
+
+import static io.todo.task.model.Priority.MINOR;
+import static io.todo.task.model.Priority.NORMAL;
+import static io.todo.task.model.Status.IN_PROGRESS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@SpringBootTest
+class TaskServiceTest {
+
+    @Autowired
+    TaskService taskService;
+
+    @Autowired
+    TaskEntityTaskMapper mapper;
+
+    @Autowired
+    TaskEntityMapper taskEntityMapper;
+
+    @MockBean
+    TaskRepository taskRepository;
+
+    @Test
+    @DisplayName("Successfully update a Task")
+    void updateTaskSuccess() throws TaskNotFoundException {
+        // given
+        var oldTask = TaskEntity.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Task Name")
+                .description("Random Task Description")
+                .completionDate(OffsetDateTime.now().toString())
+                .dueDate(OffsetDateTime.now().toString())
+                .priority(NORMAL)
+                .status(IN_PROGRESS)
+                .build();
+
+        var newTask = new Task()
+                .id(UUID.randomUUID().toString())
+                .name("Task Name Updated")
+                .priority(MINOR);
+
+        var updatedTaskEntity = mapper.taskToTaskEntity(newTask);
+        updatedTaskEntity = taskEntityMapper.update(updatedTaskEntity, oldTask);
+
+        // when
+        when(taskRepository.findById(any())).thenReturn(Optional.of(oldTask));
+        when(taskRepository.save(any())).thenReturn(updatedTaskEntity);
+
+        var updatedTask = taskService.updateTask(oldTask.getId(), newTask);
+
+        // then
+        assertEquals(oldTask.getId(), updatedTask.getId());
+        assertEquals(newTask.getName(), updatedTask.getName());
+        assertEquals(oldTask.getDescription(), updatedTask.getDescription());
+        assertEquals(oldTask.getCompletionDate(), updatedTask.getCompletionDate());
+        assertEquals(oldTask.getDueDate(), updatedTask.getDueDate());
+        assertEquals(newTask.getPriority(), updatedTask.getPriority());
+        assertEquals(oldTask.getStatus(), updatedTask.getStatus());
+    }
+
+    @Test
+    @DisplayName("Unsuccessful update of Task. Invalid Task ID")
+    void updateTaskFailureInvalidTaskId() {
+        when(taskRepository.findById(any())).thenReturn(Optional.empty());
+        assertThrows(
+                TaskNotFoundException.class,
+                () -> taskService.updateTask(UUID.randomUUID().toString(), new Task())
+        );
+    }
+}
