@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import static io.todo.task.util.TaskConstants.Exceptions.TASK_NOT_CREATED;
+import static io.todo.task.util.TaskConstants.Exceptions.TASK_NOT_FOUND;
+
 @Log4j2
 @ControllerAdvice
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -22,7 +25,7 @@ public class ApiExceptionAspect {
     public ResponseEntity<Error> handleTaskNotFoundError() {
         LOGGER.info("Entry into ApiExceptionAdvice#handleTaskNotFoundError");
         var error = new Error();
-        error.errorCode("TASK_NOT_FOUND").errorMessage("The provided Task ID is not found");
+        error.errorCode(TASK_NOT_FOUND).errorMessage("The provided Task ID is not found");
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(error);
@@ -33,7 +36,7 @@ public class ApiExceptionAspect {
     public ResponseEntity<Error> handleTaskNotCreatedError() {
         LOGGER.info("Entry into ApiExceptionAdvice#handleTaskNotCreatedError");
         Error error = new Error();
-        error.errorCode("TASK_NOT_CREATED").errorMessage("The provided Task is not created");
+        error.errorCode(TASK_NOT_CREATED).errorMessage("The provided Task is not created");
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(error);
