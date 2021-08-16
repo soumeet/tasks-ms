@@ -1,8 +1,10 @@
 package io.todo.task.api;
 
+import io.todo.task.exceptions.TaskNotCreatedException;
 import io.todo.task.model.Task;
 import io.todo.task.dao.TaskDAO;
 import io.todo.task.exceptions.TaskNotFoundException;
+import io.todo.task.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -13,14 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TaskApiImpl implements TaskApiDelegate {
-
     private final TaskDAO taskDAO;
+    private final TaskService taskService;
 
     @Override
-    public ResponseEntity<Task> createTask(Task task) {
+    public ResponseEntity<Task> createTask(Task task) throws TaskNotCreatedException {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(taskDAO.createTask(task));
+                .body(taskService.createTask(task));
     }
 
     @Override
