@@ -18,7 +18,7 @@ class TaskRepositoryTests {
     void testCreate() {
         TaskEntity taskEntity = TaskEntity.builder()
                 .name("task-name-" + new Random().nextLong())
-                .description("task-desc-" + new Random().nextLong())
+                .description("Task Repository Test")
                 .priority(Priority.MINOR)
                 .status(Status.NOT_STARTED)
                 .completionDate(null)

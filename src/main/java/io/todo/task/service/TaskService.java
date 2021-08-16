@@ -1,6 +1,8 @@
 package io.todo.task.service;
 
 import io.todo.task.dao.TaskRepository;
+import io.todo.task.dao.entity.TaskEntity;
+import io.todo.task.exceptions.TaskNotCreatedException;
 import io.todo.task.exceptions.TaskNotFoundException;
 import io.todo.task.mapper.TaskEntityMapper;
 import io.todo.task.mapper.TaskEntityTaskMapper;
@@ -9,18 +11,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Log4j2
 @RequiredArgsConstructor
 @Service
 public class TaskService {
-
     private final TaskRepository taskRepository;
     private final TaskEntityTaskMapper taskEntityTaskMapper;
     private final TaskEntityMapper taskEntityMapper;
-
-    public Task createTask(Task newTask) {
-        return null;
-    }
 
     public Task deleteTask(String taskId) {
         return null;
@@ -31,7 +30,6 @@ public class TaskService {
     }
 
     public Task updateTask(String taskId, Task task) throws TaskNotFoundException {
-
         // Fetch task to update
         var fetchedTask = taskRepository
                 .findById(taskId)
@@ -53,4 +51,24 @@ public class TaskService {
         return taskEntityTaskMapper.taskEntityToTask(updateTask);
     }
 
+    /**
+     * <p>
+     * this method generates a rondom UUID and adds task to Tasks Collection
+     * </p>
+     * @param task
+     * @return Task
+     * @see <a href="https://task-management-system.atlassian.net/browse/TM-1">TM-1</a>
+     * @since 1.0
+     * @throws TaskNotCreatedException
+     */
+    public Task createTask(Task task) throws TaskNotCreatedException {
+        task.setId(UUID.randomUUID().toString());
+        TaskEntity taskEntity = taskEntityTaskMapper.taskToTaskEntity(task);
+        try {
+            taskRepository.insert(taskEntity);
+        } catch (Exception e) {
+            throw new TaskNotCreatedException();
+        }
+        return task;
+    }
 }
