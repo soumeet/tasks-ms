@@ -44,19 +44,19 @@ class TaskServiceTest {
     void updateTaskSuccess() throws TaskNotFoundException {
         // given
         var oldTask = TaskEntity.builder()
-                .id(UUID.randomUUID().toString())
-                .name("Task Name")
-                .description("Random Task Description")
-                .completionDate(OffsetDateTime.now().toString())
-                .dueDate(OffsetDateTime.now().toString())
-                .priority(NORMAL)
-                .status(IN_PROGRESS)
-                .build();
+            .id(UUID.randomUUID().toString())
+            .name("Task Name")
+            .description("Random Task Description")
+            .completionDate(OffsetDateTime.now().toString())
+            .dueDate(OffsetDateTime.now().toString())
+            .priority(NORMAL)
+            .status(IN_PROGRESS)
+            .build();
 
         var newTask = new Task()
-                .id(UUID.randomUUID().toString())
-                .name("Task Name Updated")
-                .priority(MINOR);
+            .id(UUID.randomUUID().toString())
+            .name("Task Name Updated")
+            .priority(MINOR);
 
         var updatedTaskEntity = mapper.taskToTaskEntity(newTask);
         updatedTaskEntity = taskEntityMapper.update(updatedTaskEntity, oldTask);
@@ -82,8 +82,8 @@ class TaskServiceTest {
     void updateTaskFailureInvalidTaskId() {
         when(taskRepository.findById(any())).thenReturn(Optional.empty());
         assertThrows(
-                TaskNotFoundException.class,
-                () -> taskService.updateTask(UUID.randomUUID().toString(), new Task())
+            TaskNotFoundException.class,
+            () -> taskService.updateTask(UUID.randomUUID().toString(), new Task())
         );
     }
 
@@ -116,6 +116,42 @@ class TaskServiceTest {
         assertThrows(
                 TaskNotCreatedException.class,
                 () -> taskService.createTask(new Task())
+        );
+    }
+
+    @Test
+    @DisplayName("successfully get a Task")
+    void getTaskSuccess() throws TaskNotFoundException {
+        var taskEntity = TaskEntity.builder()
+            .id(UUID.randomUUID().toString())
+            .name("Get Task")
+            .description("Get Task Unit Test")
+            .completionDate(OffsetDateTime.now().toString())
+            .dueDate(OffsetDateTime.now().toString())
+            .priority(NORMAL)
+            .status(IN_PROGRESS)
+            .build();
+
+        when(taskRepository.findById(any())).thenReturn(Optional.of(taskEntity));
+
+        var foundTask = taskService.getTaskById(taskEntity.getId());
+
+        assertEquals(taskEntity.getId(), foundTask.getId());
+        assertEquals(taskEntity.getName(), foundTask.getName());
+        assertEquals(taskEntity.getDescription(), foundTask.getDescription());
+        assertEquals(taskEntity.getCompletionDate(), foundTask.getCompletionDate());
+        assertEquals(taskEntity.getDueDate(), foundTask.getDueDate());
+        assertEquals(taskEntity.getPriority(), foundTask.getPriority());
+        assertEquals(taskEntity.getStatus(), foundTask.getStatus());
+    }
+
+    @Test
+    @DisplayName("unsuccessful get a task. taskId not found")
+    void getTaskFailureInvalidTaskId() {
+        when(taskRepository.findById(any())).thenReturn(Optional.empty());
+        assertThrows(
+            TaskNotFoundException.class,
+            () -> taskService.getTaskById(UUID.randomUUID().toString())
         );
     }
 }

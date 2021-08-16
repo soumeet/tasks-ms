@@ -16,34 +16,33 @@ import static org.springframework.http.HttpStatus.OK;
 @Service
 @RequiredArgsConstructor
 public class TaskApiImpl implements TaskApiDelegate {
-
     private final TaskService taskService;
 
     @Override
     public ResponseEntity<Task> createTask(Task task) throws TaskNotCreatedException {
         return ResponseEntity
-                .status(CREATED)
-                .body(taskService.createTask(task));
+            .status(CREATED)
+            .body(taskService.createTask(task));
     }
 
     @Override
     public ResponseEntity<Task> deleteTask(String taskId) throws TaskNotFoundException {
         return ResponseEntity
-                .status(OK)
-                .body(taskService.deleteTask(taskId));
+            .status(OK)
+            .body(taskService.deleteTask(taskId));
     }
 
     @Override
     public ResponseEntity<Task> getTaskById(String taskId) throws TaskNotFoundException {
         return ResponseEntity
-                .status(OK)
-                .body(taskService.getTaskById(taskId));
+            .status(OK)
+            .body(taskService.getTaskById(taskId));
     }
 
     @Override
     public ResponseEntity<Task> updateTask(String taskId, Task task) throws TaskNotFoundException {
         return ResponseEntity
-                .status(OK)
-                .body(taskService.updateTask(taskId, task));
+            .status(OK)
+            .body(taskService.updateTask(taskId, task));
     }
 }
