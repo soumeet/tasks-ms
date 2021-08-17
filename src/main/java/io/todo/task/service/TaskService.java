@@ -6,12 +6,20 @@ import io.todo.task.exceptions.TaskNotCreatedException;
 import io.todo.task.exceptions.TaskNotFoundException;
 import io.todo.task.mapper.TaskEntityMapper;
 import io.todo.task.mapper.TaskEntityTaskMapper;
+import io.todo.task.model.Priority;
+import io.todo.task.model.Status;
 import io.todo.task.model.Task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static io.todo.task.util.CommonMethods.isNotNullOrEmpty;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -31,7 +39,7 @@ public class TaskService {
      * </p>
      * @param taskId
      * @return Task
-     * @see <a href="https://task-management-system.atlassian.net/browse/TM-3">TM-3</a>
+     * @see <a href="https://task-management-system.atlassian.net/browse/TM-5">TM-5</a>
      * @since 1.0
      * @throws TaskNotFoundException
      */
@@ -87,4 +95,46 @@ public class TaskService {
         return task;
     }
 
+    /**
+     * <p>
+     * this method gets task from Tasks Collection based on filter
+     * </p>
+     * @param name The name of the Task item (optional)
+     * @param desc The description of the Task item (optional)
+     * @param status The status of the Task item (optional)
+     * @param priority The priority of the Task item (optional)
+     * @param completionDate The completion date of the Task item (optional)
+     * @param dueDate The due date of the Task item (optional)
+     * @return List<Task
+     * @see <a href="https://task-management-system.atlassian.net/browse/TM-3">TM-3</a>
+     * @since 1.0
+     */
+    public List<Task> getTasksWithFilter(String name,
+       String desc, Status status, Priority priority, OffsetDateTime completionDate, OffsetDateTime dueDate) {
+        List<Task> tasks;
+
+        tasks = taskRepository
+            .findAll()
+            .stream()
+            .filter(taskEntity -> {
+                if(isNotNullOrEmpty(name))
+                    return taskEntity.getName().contains(name);
+                return true;
+            }).filter(taskEntity -> {
+                if(isNotNullOrEmpty(desc))
+                    return taskEntity.getDescription().contains(desc);
+                return true;
+            }).filter(taskEntity -> {
+                if(isNotNullOrEmpty(status))
+                    return taskEntity.getStatus().getValue().equals(status.getValue());
+                return true;
+            }).filter(taskEntity -> {
+                if(isNotNullOrEmpty(priority))
+                    return taskEntity.getPriority().getValue().equals(priority.getValue());
+                return true;
+            }).map(taskEntity -> taskEntityTaskMapper.taskEntityToTask(taskEntity))
+            .collect(Collectors.toList());
+
+        return tasks;
+    }
 }
