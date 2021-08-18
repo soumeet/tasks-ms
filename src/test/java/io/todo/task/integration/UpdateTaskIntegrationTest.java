@@ -1,8 +1,7 @@
 package io.todo.task.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.todo.task.dao.TaskRepository;
+import io.todo.task.TestSetup;
 import io.todo.task.dao.entity.TaskEntity;
 import io.todo.task.model.Priority;
 import io.todo.task.model.Status;
@@ -11,11 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -26,18 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class UpdateTaskIntegrationTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private TaskRepository taskRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+class UpdateTaskIntegrationTest extends TestSetup {
 
     String taskId;
     TaskEntity insertTask;
@@ -102,7 +86,7 @@ class UpdateTaskIntegrationTest {
     @Test
     void updateTaskNotFoundIT() throws Exception {
         mockMvc.perform(
-                        patch("/api/v1/task/" + "taskId")
+                        patch("/api/v1/task/taskId")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(updateTaskJson)
                 )
