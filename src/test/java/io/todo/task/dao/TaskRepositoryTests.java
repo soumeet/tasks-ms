@@ -2,7 +2,7 @@ package io.todo.task.dao;
 
 import io.todo.task.model.Priority;
 import io.todo.task.model.Status;
-import io.todo.task.dao.model.TaskEntity;
+import io.todo.task.dao.entity.TaskEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +18,7 @@ class TaskRepositoryTests {
     void testCreate() {
         TaskEntity taskEntity = TaskEntity.builder()
                 .name("task-name-" + new Random().nextLong())
-                .description("task-desc-" + new Random().nextLong())
+                .description("Task Repository Test")
                 .priority(Priority.MINOR)
                 .status(Status.NOT_STARTED)
                 .completionDate(null)
