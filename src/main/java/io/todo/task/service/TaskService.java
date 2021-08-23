@@ -17,9 +17,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static io.todo.task.util.CommonMethods.isNotNullOrEmpty;
+import static io.todo.task.util.CommonMethods.*;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -116,23 +115,13 @@ public class TaskService {
         tasks = taskRepository
             .findAll()
             .stream()
-            .filter(taskEntity -> {
-                if(isNotNullOrEmpty(name))
-                    return taskEntity.getName().contains(name);
-                return true;
-            }).filter(taskEntity -> {
-                if(isNotNullOrEmpty(desc))
-                    return taskEntity.getDescription().contains(desc);
-                return true;
-            }).filter(taskEntity -> {
-                if(isNotNullOrEmpty(status))
-                    return taskEntity.getStatus().getValue().equals(status.getValue());
-                return true;
-            }).filter(taskEntity -> {
-                if(isNotNullOrEmpty(priority))
-                    return taskEntity.getPriority().getValue().equals(priority.getValue());
-                return true;
-            }).map(taskEntity -> taskEntityTaskMapper.taskEntityToTask(taskEntity))
+            .filter(taskEntity -> filterUsing(taskEntity.getName(), name))
+            .filter(taskEntity -> filterUsing(taskEntity.getDescription(), desc))
+            .filter(taskEntity -> filterUsing(taskEntity.getStatus(), status))
+            .filter(taskEntity -> filterUsing(taskEntity.getPriority(), priority))
+            .filter(taskEntity -> filterUsing(taskEntity.getCompletionDate(), completionDate))
+            .filter(taskEntity -> filterUsing(taskEntity.getDueDate(), dueDate))
+            .map(taskEntity -> taskEntityTaskMapper.taskEntityToTask(taskEntity))
             .collect(Collectors.toList());
 
         return tasks;

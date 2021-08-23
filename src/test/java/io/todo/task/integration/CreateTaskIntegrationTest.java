@@ -47,8 +47,8 @@ class CreateTaskIntegrationTest {
     @BeforeEach
     void setUp() throws JsonProcessingException {
         newTask = new Task();
-        newTask.setName("Create Task");
-        newTask.setDescription("Create Task Integration Test");
+        newTask.setName("CreateTask_NAME");
+        newTask.setDescription("CreateTask_DESC");
         newTask.setCompletionDate(OffsetDateTime.now().toString());
         newTask.setDueDate(OffsetDateTime.now().toString());
         newTask.setStatus(NOT_STARTED);

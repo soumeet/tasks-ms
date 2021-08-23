@@ -9,11 +9,14 @@ import io.todo.task.model.Task;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import io.todo.task.exceptions.TaskNotCreatedException;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,6 +41,8 @@ class TaskServiceTest {
     TaskEntityMapper taskEntityMapper;
     @MockBean
     TaskRepository taskRepository;
+    @Mock
+    private List<TaskEntity> taskList;
 
     @Test
     @DisplayName("Successfully update a Task")
@@ -153,5 +158,12 @@ class TaskServiceTest {
             TaskNotFoundException.class,
             () -> taskService.getTaskById(UUID.randomUUID().toString())
         );
+    }
+
+    @Test
+    @DisplayName("unsuccessful get task with filters. no tasks found")
+    void getTaskWithFilterFailureNoTask() {
+        when(taskRepository.findAll()).thenReturn(new ArrayList<>());
+        assertEquals(0, taskService.getTasksWithFilter(null, null, null, null, null, null).size());
     }
 }
