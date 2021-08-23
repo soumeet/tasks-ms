@@ -19,81 +19,6 @@ servers:
         enum:
           - v1
 paths:
-  /tasks/:
-    get:
-      description: 'Fetches a list of tasks which can be queried based on the filters given below'
-      operationId: getTasksWithFilter
-      parameters:
-        - name: name
-          in: query
-          description: 'The name of the Task item'
-          schema:
-            type: string
-            nullable: true
-          examples:
-            fetchGrocery:
-              value: 'Fetch Grocery'
-              summary: 'Fetch Grocery'
-        - name: desc
-          in: query
-          description: 'The description of the Task item'
-          schema:
-            type: string
-            nullable: true
-          examples:
-            fetchGrocery:
-              value: 'Go and fetch grocery from Spencers'
-              summary: 'Go and fetch grocery from Spencers'
-            pickUpDad:
-              value: 'Pick up Dad from Airport'
-              summary: 'Pick up Dad from Airport'
-        - name: status
-          in: query
-          description: 'The status of the Task item'
-          schema:
-            $ref: '#/components/schemas/Status'
-        - name: priority
-          in: query
-          description: 'The priority of the Task item'
-          schema:
-            $ref: '#/components/schemas/Priority'
-        - name: completionDate
-          in: query
-          description: 'The completion date of the Task item'
-          schema:
-            type: string
-            nullable: true
-            format: date-time
-        - name: dueDate
-          in: query
-          description: 'The due date of the Task item'
-          schema:
-            type: string
-            nullable: true
-            format: date-time
-      responses:
-        200:
-          description: A Json array of TODOs
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Task'
-        404:
-          $ref: '#/components/responses/NotFound'
-        401:
-          $ref: '#/components/responses/Unauthorized'
-        403:
-          $ref: '#/components/responses/Forbidden'
-        405:
-          $ref: '#/components/responses/NotAllowed'
-        500:
-          $ref: '#/components/responses/InternalServerError'
-        501:
-          $ref: '#/components/responses/NotImplemented'
-        503:
-          $ref: '#/components/responses/ServiceUnavailable'
   /task/{taskId}:
     get:
       description: 'Fetches a single Task based on a given Task ID'
@@ -195,6 +120,80 @@ paths:
         503:
           $ref: '#/components/responses/ServiceUnavailable'
   /task/:
+    get:
+      description: 'Fetches a list of tasks which can be queried based on the filters given below'
+      operationId: getTasksWithFilter
+      parameters:
+        - name: name
+          in: query
+          description: 'The name of the Task item'
+          schema:
+            type: string
+            nullable: true
+          examples:
+            fetchGrocery:
+              value: 'Fetch Grocery'
+              summary: 'Fetch Grocery'
+        - name: desc
+          in: query
+          description: 'The description of the Task item'
+          schema:
+            type: string
+            nullable: true
+          examples:
+            fetchGrocery:
+              value: 'Go and fetch grocery from Spencers'
+              summary: 'Go and fetch grocery from Spencers'
+            pickUpDad:
+              value: 'Pick up Dad from Airport'
+              summary: 'Pick up Dad from Airport'
+        - name: status
+          in: query
+          description: 'The status of the Task item'
+          schema:
+            $ref: '#/components/schemas/Status'
+        - name: priority
+          in: query
+          description: 'The priority of the Task item'
+          schema:
+            $ref: '#/components/schemas/Priority'
+        - name: completionDate
+          in: query
+          description: 'The completion date of the Task item'
+          schema:
+            type: string
+            nullable: true
+            format: date-time
+        - name: dueDate
+          in: query
+          description: 'The due date of the Task item'
+          schema:
+            type: string
+            nullable: true
+            format: date-time
+      responses:
+        200:
+          description: A Json array of TODOs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        405:
+          $ref: '#/components/responses/NotAllowed'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        501:
+          $ref: '#/components/responses/NotImplemented'
+        503:
+          $ref: '#/components/responses/ServiceUnavailable'
     post:
       description: 'creates a new task item'
       operationId: createTask
