@@ -23,7 +23,6 @@ public class ApiExceptionAspect {
     @ExceptionHandler(TaskNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ResponseEntity<Error> handleTaskNotFoundError() {
-        LOGGER.info("Entry into ApiExceptionAdvice#handleTaskNotFoundError");
         var error = new Error();
         error.errorCode(TASK_NOT_FOUND).errorMessage("The provided Task ID is not found");
         return ResponseEntity

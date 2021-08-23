@@ -6,6 +6,7 @@ import io.todo.task.exceptions.TaskNotFoundException;
 import io.todo.task.mapper.TaskEntityMapper;
 import io.todo.task.mapper.TaskEntityTaskMapper;
 import io.todo.task.model.Task;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import io.todo.task.exceptions.TaskNotCreatedException;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static io.todo.task.model.Status.NOT_STARTED;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class TaskServiceTest {
@@ -39,11 +40,11 @@ class TaskServiceTest {
     @MockBean
     TaskRepository taskRepository;
 
-    @Test
-    @DisplayName("Successfully update a Task")
-    void updateTaskSuccess() throws TaskNotFoundException {
-        // given
-        var oldTask = TaskEntity.builder()
+    TaskEntity taskEntity;
+
+    @BeforeEach
+    void setUp() {
+        taskEntity = TaskEntity.builder()
                 .id(UUID.randomUUID().toString())
                 .name("Task Name")
                 .description("Random Task Description")
@@ -52,6 +53,13 @@ class TaskServiceTest {
                 .priority(NORMAL)
                 .status(IN_PROGRESS)
                 .build();
+    }
+
+    @Test
+    @DisplayName("Successfully update a Task")
+    void updateTaskSuccess() throws TaskNotFoundException {
+        // given
+        var oldTask = taskEntity;
 
         var newTask = new Task()
                 .id(UUID.randomUUID().toString())
@@ -88,6 +96,33 @@ class TaskServiceTest {
     }
 
     @Test
+    @DisplayName("Successfully delete a task")
+    void deleteTaskSuccessfulTest() throws TaskNotFoundException {
+        doReturn(Optional.of(taskEntity)).when(taskRepository).findById(any());
+        doNothing().when(taskRepository).deleteById(any());
+
+        var deletedTask = taskService.deleteTask(taskEntity.getId());
+
+        assertEquals(taskEntity.getId(), deletedTask.getId());
+        assertEquals(taskEntity.getName(), deletedTask.getName());
+        assertEquals(taskEntity.getDescription(), deletedTask.getDescription());
+        assertEquals(taskEntity.getStatus(), deletedTask.getStatus());
+        assertEquals(taskEntity.getPriority(), deletedTask.getPriority());
+        assertEquals(taskEntity.getDueDate(), deletedTask.getDueDate());
+        assertEquals(taskEntity.getCompletionDate(), deletedTask.getCompletionDate());
+    }
+
+
+    @Test
+    @DisplayName("Unsuccessful delete a task")
+    void deleteTaskUnsuccessfulTest() {
+        when(taskRepository.findById(any())).thenReturn(Optional.empty());
+        assertThrows(
+                TaskNotFoundException.class,
+                () -> taskService.deleteTask(taskEntity.getId())
+        );
+    }
+
     @DisplayName("successfully create task")
     void createTaskSuccess() throws TaskNotCreatedException {
         Task newTask = new Task();

@@ -21,8 +21,15 @@ public class TaskService {
     private final TaskEntityTaskMapper taskEntityTaskMapper;
     private final TaskEntityMapper taskEntityMapper;
 
-    public Task deleteTask(String taskId) {
-        return null;
+    public Task deleteTask(String taskId) throws TaskNotFoundException {
+
+        var deletedTask = taskRepository
+                .findById(taskId)
+                .orElseThrow(TaskNotFoundException::new);
+
+        taskRepository.deleteById(taskId);
+
+        return taskEntityTaskMapper.taskEntityToTask(deletedTask);
     }
 
     public Task getTaskById(String taskId) {
