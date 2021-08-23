@@ -1,5 +1,6 @@
 package io.todo.task.api;
 
+import io.todo.task.exceptions.TaskNotCreatedException;
 import io.todo.task.model.Task;
 import io.todo.task.exceptions.TaskNotFoundException;
 import io.todo.task.service.TaskService;
@@ -19,7 +20,7 @@ public class TaskApiImpl implements TaskApiDelegate {
     private final TaskService taskService;
 
     @Override
-    public ResponseEntity<Task> createTask(Task task) {
+    public ResponseEntity<Task> createTask(Task task) throws TaskNotCreatedException {
         return ResponseEntity
                 .status(CREATED)
                 .body(taskService.createTask(task));
