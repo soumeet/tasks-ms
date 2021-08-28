@@ -10,11 +10,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import io.todo.task.exceptions.TaskNotCreatedException;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,7 +42,8 @@ class TaskServiceTest {
     TaskEntityMapper taskEntityMapper;
     @MockBean
     TaskRepository taskRepository;
-
+    @Mock
+    private List<TaskEntity> taskList;
     TaskEntity taskEntity;
 
     @BeforeEach
@@ -59,7 +63,15 @@ class TaskServiceTest {
     @DisplayName("Successfully update a Task")
     void updateTaskSuccess() throws TaskNotFoundException {
         // given
-        var oldTask = taskEntity;
+        var oldTask = TaskEntity.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Task Name")
+                .description("Random Task Description")
+                .completionDate(OffsetDateTime.now().toString())
+                .dueDate(OffsetDateTime.now().toString())
+                .priority(NORMAL)
+                .status(IN_PROGRESS)
+                .build();
 
         var newTask = new Task()
                 .id(UUID.randomUUID().toString())
@@ -152,5 +164,48 @@ class TaskServiceTest {
                 TaskNotCreatedException.class,
                 () -> taskService.createTask(new Task())
         );
+    }
+
+    @Test
+    @DisplayName("successfully get a Task")
+    void getTaskSuccess() throws TaskNotFoundException {
+        var taskEntity = TaskEntity.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Get Task")
+                .description("Get Task Unit Test")
+                .completionDate(OffsetDateTime.now().toString())
+                .dueDate(OffsetDateTime.now().toString())
+                .priority(NORMAL)
+                .status(IN_PROGRESS)
+                .build();
+
+        when(taskRepository.findById(any())).thenReturn(Optional.of(taskEntity));
+
+        var foundTask = taskService.getTaskById(taskEntity.getId());
+
+        assertEquals(taskEntity.getId(), foundTask.getId());
+        assertEquals(taskEntity.getName(), foundTask.getName());
+        assertEquals(taskEntity.getDescription(), foundTask.getDescription());
+        assertEquals(taskEntity.getCompletionDate(), foundTask.getCompletionDate());
+        assertEquals(taskEntity.getDueDate(), foundTask.getDueDate());
+        assertEquals(taskEntity.getPriority(), foundTask.getPriority());
+        assertEquals(taskEntity.getStatus(), foundTask.getStatus());
+    }
+
+    @Test
+    @DisplayName("unsuccessful get a task. taskId not found")
+    void getTaskFailureInvalidTaskId() {
+        when(taskRepository.findById(any())).thenReturn(Optional.empty());
+        assertThrows(
+                TaskNotFoundException.class,
+                () -> taskService.getTaskById(UUID.randomUUID().toString())
+        );
+    }
+
+    @Test
+    @DisplayName("unsuccessful get task with filters. no tasks found")
+    void getTaskWithFilterFailureNoTask() {
+        when(taskRepository.findAll()).thenReturn(new ArrayList<>());
+        assertEquals(0, taskService.getTasksWithFilter(null, null, null, null, null, null).size());
     }
 }
