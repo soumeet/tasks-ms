@@ -1,6 +1,7 @@
 package io.todo.task.service;
 
 import io.todo.task.dao.TaskRepository;
+import io.todo.task.dao.entity.TaskEntity;
 import io.todo.task.exceptions.TaskNotCreatedException;
 import io.todo.task.exceptions.TaskNotFoundException;
 import io.todo.task.mapper.TaskEntityMapper;
@@ -97,11 +98,11 @@ public class TaskService {
         task.setId(UUID.randomUUID().toString());
         var taskEntity = taskEntityTaskMapper.taskToTaskEntity(task);
         try {
-            taskEntity = taskRepository.insert(taskEntity);
+            taskRepository.insert(taskEntity);
         } catch (Exception e) {
             throw new TaskNotCreatedException();
         }
-        return taskEntityTaskMapper.taskEntityToTask(taskEntity);
+        return task;
     }
 
     /**
@@ -132,7 +133,7 @@ public class TaskService {
                 .filter(taskEntity -> filterUsing(taskEntity.getPriority(), priority))
                 .filter(taskEntity -> filterUsing(taskEntity.getCompletionDate(), completionDate))
                 .filter(taskEntity -> filterUsing(taskEntity.getDueDate(), dueDate))
-                .map(taskEntityTaskMapper::taskEntityToTask)
+                .map(taskEntity -> taskEntityTaskMapper.taskEntityToTask(taskEntity))
                 .collect(Collectors.toList());
 
         return tasks;
